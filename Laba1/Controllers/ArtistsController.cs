@@ -26,7 +26,7 @@ namespace Laba1.Controllers
             //finding artists due to a group
             ViewBag.GroupId = id;
             ViewBag.GroupName = name;
-            ViewData["AGender"] = new SelectList(_context.Albums, "AGender");
+            ViewData["Genders"] = new SelectList(_context.Artists, "AId", "Genders");
             var ArtistsByGroup = _context.Artists.Where(ar => ar.GroupId == id).Include(ar => ar.Group).Include(ar => ar.Country);
             ///var dBGroupsContext = _context.Artists.Include(a => a.Country).Include(a => a.Group);
             return View(await ArtistsByGroup.ToListAsync());

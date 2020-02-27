@@ -8,6 +8,46 @@
 
 <h4>Artists</h4>
 <hr />
+@{
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    listItems.Add(new SelectListItem
+    {
+        Text = "Female",
+        Value = "Female",
+        Selected = true
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "Male",
+        Value = "Male",
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "Agender",
+        Value = "Agender"
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "Bigender",
+        Value = "Bigender"
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "Transgender",
+        Value = "Transgender"
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "Transsexual",
+        Value = "Transsexual"
+    });
+    listItems.Add(new SelectListItem
+    {
+        Text = "Other",
+        Value = "Other",
+    });
+}
+
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -17,11 +57,15 @@
                 <input asp-for="AName" class="form-control" />
                 <span asp-validation-for="AName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="AGender" class="control-label"></label>
-                <input asp-for="AGender" class="form-control" />
-                <span asp-validation-for="AGender" class="text-danger"></span>
-            </div>
+            @*<div class="form-group">
+            <label asp-for="AGender" class="control-label"></label>
+            <input asp-for="AGender" class="form-control" />
+            <select asp-for="AGender" class="form-control" asp-items="ViewBag.Genders"></select>
+        </div>*@
+        <div>
+            <label asp-for="AGender" class="control-label"></label>
+            @Html.DropDownList("Gender", listItems, "Gender", new { @class = "form-control" })
+        </div>
             <div class="form-group">
                 <label asp-for="ABirth" class="control-label"></label>
                 <input asp-for="ABirth" class="form-control" />
@@ -34,11 +78,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="GroupId" class="control-label"></label>
-                <select asp-for="GroupId" class ="form-control" asp-items="ViewBag.GroupId"></select>
+                <select asp-for="GroupId" class="form-control" asp-items="ViewBag.GroupId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="CountryId" class="control-label"></label>
-                <select asp-for="CountryId" class ="form-control" asp-items="ViewBag.CountryId"></select>
+                <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
             </div>
 
             <input type="hidden" value="@ViewBag.GroupId" name="GroupId" />
