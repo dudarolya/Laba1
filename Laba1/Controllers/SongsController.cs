@@ -70,17 +70,27 @@ namespace Laba1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SId,SName,SDuration,AlbumId,GenreId")] Songs songs)
+        public async Task<IActionResult> Create([Bind("SId,SName,SDuration,AlbumId,GenreId")] Songs song)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(songs);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (_context.Songs.Where(s => s.SName == song.SName).Count() != 0
+                    && _context.Songs.Where(s => s.SDuration == song.SDuration).Count() != 0
+                    && _context.Songs.Where(s => s.AlbumId == song.AlbumId).Count() != 0
+                    && _context.Songs.Where(s => s.GenreId == song.GenreId).Count() != 0)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    _context.Add(song);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            ViewData["AlbumId"] = new SelectList(_context.Albums, "AId", "AName", songs.AlbumId);
-            ViewData["GenreId"] = new SelectList(_context.Genres, "GenId", "GenName", songs.GenreId);
-            return View(songs);
+            ViewData["AlbumId"] = new SelectList(_context.Albums, "AId", "AName", song.AlbumId);
+            ViewData["GenreId"] = new SelectList(_context.Genres, "GenId", "GenName", song.GenreId);
+            return View(song);
         }
 
         // GET: Songs/Edit/5

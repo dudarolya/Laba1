@@ -57,9 +57,17 @@ namespace Laba1.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(group);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if ((_context.Groups.Where(g => g.GrName == group.GrName).Count() != 0) 
+                    && (_context.Groups.Where(g => g.GrCreation == group.GrCreation).Count() != 0))
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    _context.Add(group);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(group);
         }

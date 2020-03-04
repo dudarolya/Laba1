@@ -21,7 +21,6 @@ namespace Laba1.Controllers
         // GET: Albums
         public async Task<IActionResult> Index()
         {
-            //var GroupsOfAlbum = _context.GroupsAlbums.Where(i => i.GroupId == )
             return View(await _context.Albums.ToListAsync());
         }
 
@@ -55,15 +54,23 @@ namespace Laba1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AId,AName,ACreation")] Albums albums)
+        public async Task<IActionResult> Create([Bind("AId,AName,ACreation")] Albums album)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(albums);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (   _context.Albums.Where(a => a.AName == album.AName).Count() != 0
+                    && _context.Albums.Where(a => a.ACreation == album.ACreation).Count() != 0)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    _context.Add(album);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            return View(albums);
+            return View(album);
         }
 
         // GET: Albums/Edit/5

@@ -22,7 +22,7 @@ namespace Laba1.Controllers
         public async Task<IActionResult> Index(int? id, string? name)
         {
             if (id == null)
-                return View(await _context.Artists.ToListAsync());
+                return View(await _context.Artists.Include(ar => ar.Group).Include(ar => ar.Country).ToListAsync());
             //finding artists due to a group
             ViewBag.GroupId = id;
             ViewBag.GroupName = name;
@@ -58,8 +58,6 @@ namespace Laba1.Controllers
         {
             ViewData["CountryId"] = new SelectList(_context.Countries, "CId", "CName");
             ViewData["GroupId"] = new SelectList(_context.Groups, "GrId", "GrName");
-            //ViewBag.GroupId = groupId;
-            //ViewBag.GroupName = _context.Groups.Where(gr => gr.GrId == groupId).FirstOrDefault().GrName;
             return View();
         }
 
@@ -73,14 +71,24 @@ namespace Laba1.Controllers
             artist.GroupId = groupId;
             if (ModelState.IsValid)
             {
-                _context.Add(artist);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "Artists", new { id = groupId, name = _context.Groups.Where(gr => gr.GrId == groupId).FirstOrDefault().GrName });
-            }
-            //ViewData["CountryId"] = new SelectList(_context.Countries, "CId", "CCapital", artists.CountryId);
-            //ViewData["GroupId"] = new SelectList(_context.Groups, "GrId", "GrName", artists.GroupId);
-            //return View(artists);
-            return RedirectToAction("Index", "Artists", new { id = groupId, name = _context.Groups.Where(gr => gr.GrId == groupId).FirstOrDefault().GrName });
+                if (   _context.Artists.Where(a => a.AName == artist.AName).Count() != 0
+                    && _context.Artists.Where(a => a.AGender == artist.AGender).Count() != 0
+                    && _context.Artists.Where(a => a.ABirth == artist.ABirth).Count() != 0
+                    && _context.Artists.Where(a => a.APhone == artist.APhone).Count() != 0
+                    && _context.Artists.Where(a => a.GroupId == artist.GroupId).Count() != 0
+                    && _context.Artists.Where(a => a.CountryId == artist.CountryId).Count() != 0)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    _context.Add(artist);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "Artists", new { id = groupId, name = _context.Groups.Where(gr => gr.GrId == groupId).FirstOrDefault().GrName });
+                }
+                }
+
+            return View(artist);
         }
 
         // GET: Artists/Edit/5

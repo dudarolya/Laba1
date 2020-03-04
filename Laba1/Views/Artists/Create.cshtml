@@ -10,44 +10,41 @@
 <hr />
 @{
     List<SelectListItem> listItems = new List<SelectListItem>();
+
     listItems.Add(new SelectListItem
     {
         Text = "Female",
-        Value = "Female",
-        Selected = true
+        Value = "0",
     });
     listItems.Add(new SelectListItem
     {
         Text = "Male",
-        Value = "Male",
+        Value = "1",
     });
     listItems.Add(new SelectListItem
     {
         Text = "Agender",
-        Value = "Agender"
+        Value = "2"
     });
     listItems.Add(new SelectListItem
     {
         Text = "Bigender",
-        Value = "Bigender"
+        Value = "3"
     });
     listItems.Add(new SelectListItem
     {
         Text = "Transgender",
-        Value = "Transgender"
-    });
-    listItems.Add(new SelectListItem
-    {
-        Text = "Transsexual",
-        Value = "Transsexual"
+        Value = "4",
     });
     listItems.Add(new SelectListItem
     {
         Text = "Other",
-        Value = "Other",
+        Value = "5"
     });
 }
-
+@{
+    ViewData["AGender"] = new SelectList(listItems, "Text");
+}
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
@@ -57,15 +54,11 @@
                 <input asp-for="AName" class="form-control" />
                 <span asp-validation-for="AName" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
-            <label asp-for="AGender" class="control-label"></label>
-            <input asp-for="AGender" class="form-control" />
-            <select asp-for="AGender" class="form-control" asp-items="ViewBag.Genders"></select>
-        </div>*@
-        <div>
-            <label asp-for="AGender" class="control-label"></label>
-            @Html.DropDownList("Gender", listItems, "Gender", new { @class = "form-control" })
-        </div>
+            <div class="form-group">
+                <label asp-for="AGender" class="control-label"></label>
+                <select asp-for="AGender" class="form-control" asp-items=listItems></select>
+                <span asp-validation-for="AGender" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="ABirth" class="control-label"></label>
                 <input asp-for="ABirth" class="form-control" />
@@ -90,14 +83,14 @@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
-        </form>
-    </div>
-</div>
+                </form>
+            </div>
+        </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+        @section Scripts {
+            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+        }

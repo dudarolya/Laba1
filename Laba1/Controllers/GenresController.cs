@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Laba1;
+using System.ComponentModel.DataAnnotations;
 
 namespace Laba1.Controllers
 {
@@ -54,15 +55,22 @@ namespace Laba1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GenId,GenName")] Genres genres)
+        public async Task<IActionResult> Create([Bind("GenId,GenName")] Genres genre)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(genres);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (_context.Genres.Where(g => g.GenName == genre.GenName).Count() != 0)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    _context.Add(genre);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            return View(genres);
+            return View(genre);
         }
 
         // GET: Genres/Edit/5

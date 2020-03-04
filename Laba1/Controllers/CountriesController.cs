@@ -53,15 +53,23 @@ namespace Laba1.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CId,CName,CLang,CCapital")] Countries countries)
+        public async Task<IActionResult> Create([Bind("CId,CName,CLang,CCapital")] Countries country)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(countries);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                if (   _context.Countries.Where(c => c.CName == country.CName).Count() != 0
+                    && _context.Countries.Where(c => c.CCapital == country.CCapital).Count() != 0)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    _context.Add(country);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            return View(countries);
+            return View(country);
         }
 
         // GET: Countries/Edit/5
