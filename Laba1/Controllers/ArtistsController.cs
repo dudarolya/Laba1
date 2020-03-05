@@ -28,7 +28,6 @@ namespace Laba1.Controllers
             ViewBag.GroupName = name;
             ViewData["Genders"] = new SelectList(_context.Artists, "AId", "Genders");
             var ArtistsByGroup = _context.Artists.Where(ar => ar.GroupId == id).Include(ar => ar.Group).Include(ar => ar.Country);
-            ///var dBGroupsContext = _context.Artists.Include(a => a.Country).Include(a => a.Group);
             return View(await ArtistsByGroup.ToListAsync());
 
         }
