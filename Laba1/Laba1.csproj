@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Gender.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot\css\bootstrap_sketchy.css" />
     <Content Remove="wwwroot\css\bootstrap_sketchy.min.css" />
   </ItemGroup>
